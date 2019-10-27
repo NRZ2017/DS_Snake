@@ -3,7 +3,7 @@
 #include<iostream>
 #include "SnakePart.h"
 
-enum Directions
+enum class Directions
 {
 	up,
 	down,
@@ -15,10 +15,11 @@ class Snake
 {
 public:
 	void DrawSnake(sf::RenderWindow& window);
-	void Update();
+	void UpdateMovement();
+	void UpdateState();
 	const int& count = Count;
 	Snake();
-	
+
 
 
 private:
@@ -27,19 +28,20 @@ private:
 	int Offset;
 
 	Directions currentDirection;
-	
+
 };
 
 Snake::Snake()
 {
 	snake = std::list<SnakePart>();
-	snake.push_back(SnakePart(100, 100));
 	Count = 1;
-	Offset = 10;
+	Offset = 27;
 	currentDirection = Directions::right;
+	snake.push_back(SnakePart(100, 100));
+	snake.push_back(SnakePart(100 + Offset, 100));
 }
 
-void Snake::Update()
+void Snake::UpdateState()
 {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -59,28 +61,37 @@ void Snake::Update()
 		currentDirection = Directions::left;
 	}
 
+}
+
+void Snake::UpdateMovement()
+{
+
 
 	switch (currentDirection)
 	{
 	case Directions::up:
-		snake.back().FPositionX = snake.front().FPositionY + Offset;
+		snake.back().PositionY = snake.front().PositionY - Offset;
+		snake.back().PositionX = snake.front().PositionX;
 		snake.push_front(snake.back());
 		snake.pop_back();
 		break;
 	case Directions::down:
-		snake.back().FPositionX = snake.front().FPositionY - Offset;
-		snake.push_back(snake.front());
-		snake.pop_front();
+		snake.back().PositionY = snake.front().PositionY + Offset;
+		snake.back().PositionX = snake.front().PositionX;
+		snake.push_front(snake.back());
+		snake.pop_back();
 		break;
 	case Directions::right:
-			snake.back().FPositionX = snake.front().FPositionX + Offset;
-			snake.push_front(snake.back());
-			snake.pop_back();
+		snake.back().PositionX = snake.front().PositionX + Offset;
+		snake.back().PositionY = snake.front().PositionY;
+		snake.push_front(snake.back());
+		snake.pop_back();
 		break;
 	case Directions::left:
-		snake.back().FPositionX = snake.front().FPositionX - Offset;
-		snake.push_back(snake.front());
-		snake.pop_front();
+		snake.back().PositionX = snake.front().PositionX - Offset;
+		snake.back().PositionY = snake.front().PositionY;
+		snake.push_front(snake.back());
+		snake.pop_back();
 		break;
 	}
 
