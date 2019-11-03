@@ -154,6 +154,7 @@
     <ClCompile Include="DS_Snake.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Food.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakePart.h" />
   </ItemGroup>

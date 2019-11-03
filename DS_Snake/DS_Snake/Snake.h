@@ -2,6 +2,7 @@
 #include <list>
 #include<iostream>
 #include "SnakePart.h"
+#include "Food.h"
 
 enum class Directions
 {
@@ -16,7 +17,8 @@ class Snake
 public:
 	void DrawSnake(sf::RenderWindow& window);
 	void UpdateMovement();
-	void UpdateState();
+	bool UpdateState();
+	void UpdateCollision(Food& food, sf::RenderWindow& window);
 	const int& count = Count;
 	Snake();
 
@@ -38,29 +40,33 @@ Snake::Snake()
 	Offset = 27;
 	currentDirection = Directions::right;
 	snake.push_back(SnakePart(100, 100));
-	snake.push_back(SnakePart(100 + Offset, 100));
+	snake.push_back(SnakePart(100, 100));
 }
 
-void Snake::UpdateState()
+bool Snake::UpdateState()
 {
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		currentDirection = Directions::down;
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
 		currentDirection = Directions::up;
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
 		currentDirection = Directions::right;
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
 		currentDirection = Directions::left;
+		return true;
 	}
-
+	return false;
 }
 
 void Snake::UpdateMovement()
@@ -95,6 +101,18 @@ void Snake::UpdateMovement()
 		break;
 	}
 
+}
+
+void Snake::UpdateCollision(Food& food, sf::RenderWindow& window)
+{
+	snake.front().UpdateHitbox();
+	food.UpdateHitbox();
+	if (snake.front().hitBox.intersects(food.hitBox))
+	{
+		food.RandomPosition(window);
+		food.UpdateHitbox();
+		snake.push_back(SnakePart(snake.back().PositionX, snake.back().PositionY));
+	}
 }
 
 void Snake::DrawSnake(sf::RenderWindow& window)
