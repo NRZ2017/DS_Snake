@@ -20,26 +20,28 @@ public:
 	bool UpdateState();
 	void UpdateCollision(Food& food, sf::RenderWindow& window);
 	const int& count = Count;
+	Snake(sf::RenderWindow& window);
 	Snake();
 
 
-
 private:
-	std::list<SnakePart> snake;
-	int Count = 0;
-	int Offset;
-
-	Directions currentDirection;
+	std::list<SnakePart> snake{};
+	int Count{};
+	int Offset{};
+	sf::FloatRect windowHitbox{};
+	Directions currentDirection{};
 
 };
 
-Snake::Snake()
+Snake::Snake() {}
+
+Snake::Snake(sf::RenderWindow& window)
 {
 	snake = std::list<SnakePart>();
 	Count = 1;
 	Offset = 27;
 	currentDirection = Directions::right;
-	snake.push_back(SnakePart(100, 100));
+	windowHitbox = sf::FloatRect(0, 0, window.getSize().x, window.getSize().y);
 	snake.push_back(SnakePart(100, 100));
 }
 
@@ -69,6 +71,7 @@ bool Snake::UpdateState()
 	return false;
 }
 
+
 void Snake::UpdateMovement()
 {
 
@@ -76,29 +79,38 @@ void Snake::UpdateMovement()
 	switch (currentDirection)
 	{
 	case Directions::up:
-		snake.back().PositionY = snake.front().PositionY - Offset;
-		snake.back().PositionX = snake.front().PositionX;
+	{
+		auto& backpart = snake.back();
+		backpart.PositionY = snake.front().PositionY - Offset;
+		backpart.PositionX = snake.front().PositionX;
 		snake.push_front(snake.back());
 		snake.pop_back();
 		break;
+	}
 	case Directions::down:
+	{
 		snake.back().PositionY = snake.front().PositionY + Offset;
 		snake.back().PositionX = snake.front().PositionX;
 		snake.push_front(snake.back());
 		snake.pop_back();
 		break;
+	}
 	case Directions::right:
+	{
 		snake.back().PositionX = snake.front().PositionX + Offset;
 		snake.back().PositionY = snake.front().PositionY;
 		snake.push_front(snake.back());
 		snake.pop_back();
 		break;
+	}
 	case Directions::left:
+	{
 		snake.back().PositionX = snake.front().PositionX - Offset;
 		snake.back().PositionY = snake.front().PositionY;
 		snake.push_front(snake.back());
 		snake.pop_back();
 		break;
+	}
 	}
 
 }
@@ -113,6 +125,10 @@ void Snake::UpdateCollision(Food& food, sf::RenderWindow& window)
 		food.UpdateHitbox();
 		snake.push_back(SnakePart(snake.back().PositionX, snake.back().PositionY));
 	}
+	//if (snake.front().hitBox.left > windowHitbox.left)
+	//{
+	//	window.close();
+	//}
 }
 
 void Snake::DrawSnake(sf::RenderWindow& window)
@@ -123,3 +139,4 @@ void Snake::DrawSnake(sf::RenderWindow& window)
 	}
 
 }
+

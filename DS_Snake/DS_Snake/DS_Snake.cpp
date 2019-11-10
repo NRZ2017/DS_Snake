@@ -5,8 +5,8 @@
 #include "Food.h"
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(600, 400), "Snake");
-	Snake snake;
+	sf::RenderWindow window(sf::VideoMode(1300, 400), "Snake");
+	Snake snake(window);
 	Food food(window);
 	sf::Clock clock;
 	bool IsAPressed;
@@ -29,13 +29,14 @@ int main()
 		{
 			IsAPressed = true;
 		}
-		bool shouldUpdate = snake.UpdateState();
+	//	bool shouldUpdate = snake.UpdateState();
 		timer = clock.getElapsedTime();
-		if (timer >= sf::milliseconds(500) || shouldUpdate)
+		if (timer >= sf::milliseconds(500) /*|| shouldUpdate*/)
 		{
 			window.clear(sf::Color::White);
 			snake.DrawSnake(window);
 			food.DrawPart(window);
+			snake.UpdateState();
 			snake.UpdateMovement();
 			snake.UpdateCollision(food, window);
 
