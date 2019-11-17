@@ -5,7 +5,7 @@
 #include "Food.h"
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1300, 400), "Snake");
+	sf::RenderWindow window(sf::VideoMode(400, 427), "Snake");
 	Snake snake(window);
 	Food food(window);
 	sf::Clock clock;
@@ -13,6 +13,7 @@ int main()
 	bool IsSPressed;
 	bool IsWPressed;
 	bool IsDPressed;
+	int time = 500;
 
 	sf::Time timer;
 	while (window.isOpen())
@@ -29,17 +30,17 @@ int main()
 		{
 			IsAPressed = true;
 		}
+			snake.UpdateState();
 	//	bool shouldUpdate = snake.UpdateState();
 		timer = clock.getElapsedTime();
-		if (timer >= sf::milliseconds(500) /*|| shouldUpdate*/)
+		if (timer >= sf::milliseconds(time) /*|| shouldUpdate*/)
 		{
 			window.clear(sf::Color::White);
+			snake.UpdateMovement();
+			snake.UpdateCollision(food, window, time);
+
 			snake.DrawSnake(window);
 			food.DrawPart(window);
-			snake.UpdateState();
-			snake.UpdateMovement();
-			snake.UpdateCollision(food, window);
-
 			window.display();
 			clock.restart();
 		}

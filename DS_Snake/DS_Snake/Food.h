@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdlib.h>
 #include <time.h>
+#include "SnakePart.h"
 
 class Food
 {
@@ -31,13 +32,6 @@ Food::Food(sf::RenderWindow& window)
 	hitBox = body.getGlobalBounds();
 }
 
-void Food::DrawPart(sf::RenderWindow& window)
-{
-	body.setFillColor(sf::Color::Black);
-	body.setPosition(genX , genY);
-	window.draw(body);
-}
-
 void Food::UpdateHitbox()
 {
 	hitBox.left = genX;
@@ -48,4 +42,17 @@ void Food::RandomPosition(sf::RenderWindow& window)
 {
 	genX = rand() % window.getSize().x + 0;
 	genY = rand() % window.getSize().y + 0;
+}
+
+void Food::DrawPart(sf::RenderWindow& window)
+{
+	body.setFillColor(sf::Color::Black);
+	body.setPosition(genX, genY);
+	window.draw(body);
+	if (genX >= window.getSize().x || genY >= window.getSize().y)
+	{
+		RandomPosition(window);
+		body.setPosition(genX, genY);
+		window.draw(body);
+	}
 }

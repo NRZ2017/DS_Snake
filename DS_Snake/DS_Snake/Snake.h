@@ -18,7 +18,7 @@ public:
 	void DrawSnake(sf::RenderWindow& window);
 	void UpdateMovement();
 	bool UpdateState();
-	void UpdateCollision(Food& food, sf::RenderWindow& window);
+	void UpdateCollision(Food& food, sf::RenderWindow& window, int& time);
 	const int& count = Count;
 	Snake(sf::RenderWindow& window);
 	Snake();
@@ -115,7 +115,7 @@ void Snake::UpdateMovement()
 
 }
 
-void Snake::UpdateCollision(Food& food, sf::RenderWindow& window)
+void Snake::UpdateCollision(Food& food, sf::RenderWindow& window, int& time)
 {
 	snake.front().UpdateHitbox();
 	food.UpdateHitbox();
@@ -124,11 +124,36 @@ void Snake::UpdateCollision(Food& food, sf::RenderWindow& window)
 		food.RandomPosition(window);
 		food.UpdateHitbox();
 		snake.push_back(SnakePart(snake.back().PositionX, snake.back().PositionY));
+		time -= 10;
 	}
-	//if (snake.front().hitBox.left > windowHitbox.left)
-	//{
-	//	window.close();
-	//}
+	if (snake.front().hitBox.left < windowHitbox.left - 27)
+	{
+		window.close();
+	}
+	if (snake.front().hitBox.left + snake.front().hitBox.width > windowHitbox.width + 27)
+	{
+		window.close();
+	}
+	if (snake.front().hitBox.top < windowHitbox.top - 27)
+	{
+		window.close();
+	}
+	if (snake.front().hitBox.top + snake.front().hitBox.height > windowHitbox.height + 27)
+	{
+		window.close();
+	}
+	for (auto i = snake.begin(); i != snake.end(); i++)
+	{
+		if (snake.begin() == i)
+		{
+			continue;
+		}
+
+		if (snake.front().hitBox.intersects(i->hitBox))
+		{
+			window.close();
+		}
+	}
 }
 
 void Snake::DrawSnake(sf::RenderWindow& window)
