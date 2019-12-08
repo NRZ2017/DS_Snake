@@ -30,4 +30,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="BebasNeue-Regular.ttf" />
+  </ItemGroup>
 </Project>

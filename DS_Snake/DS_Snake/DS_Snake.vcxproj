@@ -158,6 +158,11 @@
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakePart.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="BebasNeue-Regular.ttf">
+      <DeploymentContent>false</DeploymentContent>
+    </Font>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

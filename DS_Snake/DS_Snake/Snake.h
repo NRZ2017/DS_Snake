@@ -18,7 +18,7 @@ public:
 	void DrawSnake(sf::RenderWindow& window);
 	void UpdateMovement();
 	bool UpdateState();
-	void UpdateCollision(Food& food, sf::RenderWindow& window, int& time);
+	int UpdateCollision(Food& food, sf::RenderWindow& window, int& time, int score);
 	const int& count = Count;
 	Snake(sf::RenderWindow& window);
 	Snake();
@@ -115,12 +115,13 @@ void Snake::UpdateMovement()
 
 }
 
-void Snake::UpdateCollision(Food& food, sf::RenderWindow& window, int& time)
+int Snake::UpdateCollision(Food& food, sf::RenderWindow& window, int& time, int score)
 {
 	snake.front().UpdateHitbox();
 	food.UpdateHitbox();
 	if (snake.front().hitBox.intersects(food.hitBox))
 	{
+		score++;
 		food.RandomPosition(window);
 		food.UpdateHitbox();
 		snake.push_back(SnakePart(snake.back().PositionX, snake.back().PositionY));
@@ -154,6 +155,7 @@ void Snake::UpdateCollision(Food& food, sf::RenderWindow& window, int& time)
 			window.close();
 		}
 	}
+	return score;
 }
 
 void Snake::DrawSnake(sf::RenderWindow& window)
